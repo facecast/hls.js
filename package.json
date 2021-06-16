@@ -20,7 +20,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "install": "npm run build",
   "scripts": {
     "build": "webpack --progress && npm run build:types",
     "build:ci": "webpack && tsc --build tsconfig-lib.json && api-extractor run",
@@ -48,6 +47,7 @@
     "test:func:sauce-ie": "SAUCE=1 UA='internet explorer' OS='Windows 10' BABEL_ENV=development mocha --require @babel/register tests/functional/auto/setup.js --timeout 40000 --exit",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
+    "install": "npm run build",
     "prepare": "husky install"
   },
   "devDependencies": {
