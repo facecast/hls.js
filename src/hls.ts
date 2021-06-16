@@ -96,6 +96,8 @@ export default class Hls implements HlsEventEmitter {
    * @param {HlsConfig} config
    */
   constructor(userConfig: Partial<HlsConfig> = {}) {
+    console.log('USING @facecast/hls.js');
+
     const config = (this.config = mergeConfig(Hls.DefaultConfig, userConfig));
     this.userConfig = userConfig;
     enableLogs(config.debug);
