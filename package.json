@@ -20,6 +20,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "install": "npm run build",
   "scripts": {
     "build": "webpack --progress && npm run build:types",
     "build:ci": "webpack && tsc --build tsconfig-lib.json && api-extractor run",
