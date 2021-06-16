@@ -47,7 +47,7 @@
     "test:func:sauce-ie": "SAUCE=1 UA='internet explorer' OS='Windows 10' BABEL_ENV=development mocha --require @babel/register tests/functional/auto/setup.js --timeout 40000 --exit",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "prepare": "husky install"
+    "prepare": "husky install && npm run build"
   },
   "devDependencies": {
     "@babel/core": "7.14.6",
