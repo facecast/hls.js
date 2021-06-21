@@ -2,6 +2,7 @@ import { Events } from '../events';
 import { Fragment, Part } from '../loader/fragment';
 import { PlaylistLevelType } from '../types/loader';
 import type { SourceBufferName } from '../types/buffer';
+import type { BufferTimeRange } from '../utils/buffer-helper';
 import type {
   FragmentBufferedRange,
   FragmentEntity,
@@ -26,6 +27,7 @@ export enum FragmentState {
 export class FragmentTracker implements ComponentAPI {
   private activeFragment: Fragment | null = null;
   private activeParts: Part[] | null = null;
+  private skippedFragments: Record<string, FragmentEntity> = {};
   private fragments: Partial<Record<string, FragmentEntity>> =
     Object.create(null);
   private timeRanges:
@@ -126,6 +128,28 @@ export class FragmentTracker implements ComponentAPI {
       }
     }
     return null;
+  }
+
+  public getSkippedRanges(): BufferTimeRange[] {
+    const keys = Object.keys(this.skippedFragments);
+    const ranges = Array<BufferTimeRange>(keys.length);
+
+    for (let i = 0; i < keys.length; i += 1) {
+      const { body } = this.skippedFragments[keys[i]];
+      ranges[i] = { start: body.start, end: body.end };
+    }
+
+    return ranges;
+  }
+
+  public skipFrag(frag: Fragment): void {
+    this.skippedFragments[getFragmentKey(frag)] = {
+      body: frag,
+      loaded: null,
+      backtrack: null,
+      buffered: false,
+      range: Object.create(null),
+    };
   }
 
   /**
@@ -449,6 +473,7 @@ export class FragmentTracker implements ComponentAPI {
     fragment.stats.loaded = 0;
     fragment.clearElementaryStreamInfo();
     delete this.fragments[fragKey];
+    delete this.skippedFragments[fragKey];
   }
 
   public removeAllFragments() {

@@ -10,7 +10,7 @@
 
 import { logger } from './logger';
 
-type BufferTimeRange = {
+export type BufferTimeRange = {
   start: number;
   end: number;
 };
@@ -60,12 +60,14 @@ export class BufferHelper {
   static bufferInfo(
     media: Bufferable | null,
     pos: number,
-    maxHoleDuration: number
+    maxHoleDuration: number,
+    skippedRanges?: BufferTimeRange[]
   ): BufferInfo {
     try {
       if (media) {
         const vbuffered = BufferHelper.getBuffered(media);
-        const buffered: BufferTimeRange[] = [];
+        // consider skipped ranges as buffered to prevent loading them
+        const buffered: BufferTimeRange[] = [...(skippedRanges || [])];
         let i: number;
         for (i = 0; i < vbuffered.length; i++) {
           buffered.push({ start: vbuffered.start(i), end: vbuffered.end(i) });

@@ -746,22 +746,31 @@ export default class BaseStreamController
     if (!Number.isFinite(pos)) {
       return null;
     }
+    const skippedRanges = this.fragmentTracker.getSkippedRanges();
+
     const bufferInfo = BufferHelper.bufferInfo(
       bufferable,
       pos,
-      config.maxBufferHole
+      config.maxBufferHole,
+      skippedRanges
     );
-    // Workaround flaw in getting forward buffer when maxBufferHole is smaller than gap at current pos
-    if (bufferInfo.len === 0 && bufferInfo.nextStart !== undefined) {
-      const bufferedFragAtPos = this.fragmentTracker.getBufferedFrag(pos, type);
-      if (bufferedFragAtPos && bufferInfo.nextStart < bufferedFragAtPos.end) {
-        return BufferHelper.bufferInfo(
-          bufferable,
-          pos,
-          Math.max(bufferInfo.nextStart, config.maxBufferHole)
-        );
-      }
+
+    const bufferedFragAtPos = this.fragmentTracker.getBufferedFrag(
+      bufferInfo.end,
+      type
+    );
+
+    // fragment already buffered, jump to the next one
+    if (bufferedFragAtPos && bufferInfo.nextStart !== undefined) {
+      this.fragmentTracker.skipFrag(bufferedFragAtPos);
+
+      return BufferHelper.bufferInfo(
+        bufferable,
+        bufferInfo.nextStart,
+        config.maxBufferHole
+      );
     }
+
     return bufferInfo;
   }
 
