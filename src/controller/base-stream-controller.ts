@@ -764,11 +764,9 @@ export default class BaseStreamController
     if (bufferedFragAtPos && bufferInfo.nextStart !== undefined) {
       this.fragmentTracker.skipFrag(bufferedFragAtPos);
 
-      return BufferHelper.bufferInfo(
-        bufferable,
-        bufferInfo.nextStart,
-        config.maxBufferHole
-      );
+      const nextPos = pos + bufferedFragAtPos.duration;
+
+      return BufferHelper.bufferInfo(bufferable, nextPos, config.maxBufferHole);
     }
 
     return bufferInfo;
