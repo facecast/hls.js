@@ -215,12 +215,16 @@ class AbrController implements ComponentAPI {
     ) {
       const stats = part ? part.stats : frag.stats;
       const duration = part ? part.duration : frag.duration;
+      const bwEstimator = this.bwEstimator;
       // stop monitoring bw once frag loaded
       this.clearTimer();
       // store level id after successful fragment load
       this.lastLoadedFragLevel = frag.level;
+
       // reset forced auto level value so that next level will be selected
-      this._nextAutoLevel = -1;
+      if (bwEstimator?.canEstimate()) {
+        this._nextAutoLevel = -1;
+      }
 
       // compute level average bitrate
       if (this.hls.config.abrMaxWithRealBitrate) {
