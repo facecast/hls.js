@@ -86,8 +86,19 @@ export default class Hls implements HlsEventEmitter {
   /**
    * in Facecast we need some of the M3U8Parser logic for our purposes
    */
-  static get m3u8Parser(): typeof M3U8Parser {
-    return M3U8Parser;
+  static parseMasterPlaylist(source: string): {
+    url: string;
+    bitrate: number;
+    height?: number;
+    width?: number;
+  }[] {
+    // get exactly the format we need so it won't break in future versions of M3U8Parser
+    return M3U8Parser.parseMasterPlaylist(source, '').levels.map((l) => ({
+      url: l.url,
+      bitrate: l.bitrate,
+      height: l.height,
+      width: l.width,
+    }));
   }
 
   /**
