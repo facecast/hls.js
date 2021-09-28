@@ -1,6 +1,7 @@
 import * as URLToolkit from 'url-toolkit';
 import PlaylistLoader from './loader/playlist-loader';
 import KeyLoader from './loader/key-loader';
+import M3U8Parser from './loader/m3u8-parser';
 import ID3TrackController from './controller/id3-track-controller';
 import LatencyController from './controller/latency-controller';
 import LevelController from './controller/level-controller';
@@ -80,6 +81,13 @@ export default class Hls implements HlsEventEmitter {
     }
 
     return Hls.defaultConfig;
+  }
+
+  /**
+   * in Facecast we need some of the M3U8Parser logic for our purposes
+   */
+  static get m3u8Parser(): typeof M3U8Parser {
+    return M3U8Parser;
   }
 
   /**

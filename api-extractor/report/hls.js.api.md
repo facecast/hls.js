@@ -878,6 +878,8 @@ class Hls implements HlsEventEmitter {
     get lowLatencyMode(): boolean;
     // Warning: (ae-setter-with-docs) The doc comment for the property "lowLatencyMode" must appear on the getter, not the setter.
     set lowLatencyMode(mode: boolean);
+    // Warning: (ae-forgotten-export) The symbol "M3U8Parser" needs to be exported by the entry point hls.d.ts
+    static get m3u8Parser(): typeof M3U8Parser;
     get manualLevel(): number;
     get maxAutoLevel(): number;
     get maxLatency(): number;
