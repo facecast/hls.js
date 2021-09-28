@@ -900,11 +900,18 @@ class Hls implements HlsEventEmitter {
     // (undocumented)
     once<E extends keyof HlsListeners, Context = undefined>(event: E, listener: HlsListeners[E], context?: Context): void;
     static parseMasterPlaylist(source: string): {
-        url: string;
-        bitrate: number;
-        height?: number;
-        width?: number;
-    }[];
+        video: {
+            url: string;
+            bitrate: number;
+            height?: number;
+            width?: number;
+        }[];
+        audio: {
+            id: number;
+            url: string;
+            name: string;
+        }[];
+    };
     recoverMediaError(): void;
     // (undocumented)
     removeAllListeners<E extends keyof HlsListeners>(event?: E | undefined): void;
